@@ -5,19 +5,21 @@ const Header = () => {
     )
 }
 
-const Content = (props) => {
-    
-    const contentsElements = [];
-
-    props.contents.forEach(element => {
-        contentsElements.push(
-            <p key={element.part}>{element.part + element.exercises}</p>
-        );
-    });
-
+const Part = (props) => {
     return (
         <>
-            {contentsElements}
+            <p>{props.content.part + props.content.exercises}</p> 
+        </>
+    )
+}
+
+const Content = (props) => {
+    
+    return (
+        <>
+            <Part content={props.contents[0]}/>
+            <Part content={props.contents[1]}/>
+            <Part content={props.contents[2]}/>
         </>
     ) 
 }
