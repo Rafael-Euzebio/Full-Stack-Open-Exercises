@@ -27,7 +27,7 @@ const App = () => {
             setNewName('')
         }
         else {
-            alert(newName + ' is already in phonebook')
+            alert(`${newName} is already in phonebook`)
         }
     }
 
