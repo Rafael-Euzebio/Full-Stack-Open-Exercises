@@ -10,10 +10,25 @@ const App = () => {
         setNewName(event.target.value)
     }
 
+    const isInPhonebook = (newName) => {
+        persons.map((person) => {
+            const name = person.name
+            if (newName === name) {
+                return true
+            }
+        })
+    }
+
     const handleNameSubmit = (event) => {
         event.preventDefault()
-        setPersons(persons.concat({ name: newName }))
-        setNewName('')
+
+        if (isInPhonebook == false) {
+            setPersons(persons.concat({ name: newName }))
+            setNewName('')
+        }
+        else {
+            alert(newName + ' is already in phonebook')
+        }
     }
 
     return (
