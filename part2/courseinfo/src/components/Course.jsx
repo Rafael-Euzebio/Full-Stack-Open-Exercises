@@ -1,6 +1,6 @@
 const CourseHeader = ({ name }) => <h2>{name}</h2>
 
-const Part = ({ part }) => {
+    const Part = ({ part }) => {
     return (
         <p>
             {part.name} {part.exercises}
