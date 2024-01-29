@@ -1,6 +1,5 @@
 const Persons = ({ persons }) => {
     return (
-
         <ul>
             {persons.map(person => {
                 return (
