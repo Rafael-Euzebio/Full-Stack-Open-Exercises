@@ -19,8 +19,19 @@ const PersonForm = ({ persons, setPersons }) => {
 
         persons.map((person) => {
             const name = person.name
+
             if (newName === name) {
-                alert(`${newName} is already in phonebook`)
+                if (window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`)) {
+                    const updatedPerson = { ...person, number: newNumber }
+
+                    phonebookServices
+                        .update(updatedPerson)
+                        .then(returnedPerson => {
+                            setPersons(persons.map(person =>
+                                person.id !== returnedPerson.id ? person : returnedPerson
+                            ))
+                        })
+                }
                 found = true
             }
         })

@@ -10,12 +10,12 @@ const DeleteButton = ({ toDelete, persons, setPersons }) => {
             phonebookServices
                 .remove(id)
                 .then(removedPerson => {
-                    const toKeep = persons.filter((person) => {
+                    const personsToKeep = persons.filter((person) => {
                         if (person.id !== removedPerson.id) {
                             return person;
                         }
                     })
-                    setPersons(toKeep)
+                    setPersons(personsToKeep)
                 })
         }
     }
