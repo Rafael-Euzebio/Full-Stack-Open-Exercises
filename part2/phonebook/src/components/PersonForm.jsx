@@ -1,4 +1,5 @@
 import { useState } from "react"
+import personService from "../services/persons"
 
 const PersonForm = ({ persons, setPersons }) => {
 
@@ -29,11 +30,15 @@ const PersonForm = ({ persons, setPersons }) => {
 
     const handleNameSubmit = (event) => {
         event.preventDefault()
+        const newPerson = { name: newName, number: newNumber }
 
         if (isInPhonebook() == false) {
-            setPersons(persons.concat({
-                name: newName, number: newNumber
-            }))
+            personService.
+                create(newPerson)
+                .then(returnedPerson => {
+                    setPersons(persons.concat(returnedPerson))
+                })
+
             setNewName('')
             setNewNumber('')
         }
