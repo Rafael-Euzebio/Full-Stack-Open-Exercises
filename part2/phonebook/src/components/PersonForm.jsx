@@ -1,5 +1,5 @@
 import { useState } from "react"
-import personService from "../services/persons"
+import phonebookServices from "../services/phonebookServices"
 
 const PersonForm = ({ persons, setPersons }) => {
 
@@ -33,8 +33,8 @@ const PersonForm = ({ persons, setPersons }) => {
         const newPerson = { name: newName, number: newNumber }
 
         if (isInPhonebook() == false) {
-            personService.
-                create(newPerson)
+            phonebookServices
+                .create(newPerson)
                 .then(returnedPerson => {
                     setPersons(persons.concat(returnedPerson))
                 })

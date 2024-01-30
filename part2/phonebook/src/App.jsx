@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import Filter from './components/Filter'
-import personService from './services/persons'
+import phonebookServices from './services/phonebookServices'
 
 const App = () => {
     const [persons, setPersons] = useState([])
 
     useEffect(() => {
-        personService
+        phonebookServices
             .getAll()
             .then(registeredPersons => {
                 setPersons(registeredPersons)
@@ -24,7 +24,7 @@ const App = () => {
             <PersonForm persons={persons} setPersons={setPersons} />
 
             <h3>Numbers</h3>
-            <Persons persons={persons} />
+            <Persons persons={persons} setPersons={setPersons} />
 
         </div>
     )
