@@ -10,13 +10,15 @@ const Search = ({ countries, setCountries, setFiltered }) => {
     }, [query])
 
     const handleQueryChange = (event) => {
-        setQuery(event.target.value)
-        filter(countries, query)
+        const updatedQuery = event.target.value
+        setQuery(updatedQuery)
+        filter(countries, updatedQuery)
     }
 
     const filter = (countries, query) => {
         const filtered = countries.filter((country) => {
             const name = country.name.common
+            console.log(query)
             return name.toLowerCase().includes(query.toLowerCase())
         })
         setFiltered(filtered)
