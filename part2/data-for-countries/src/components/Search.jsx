@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import apiServices from "../services/apiServices";
-import RenderCountry from "./RenderCountry";
 
 const Search = ({ countries, setCountries, setFiltered }) => {
     const [query, setQuery] = useState('')
@@ -18,7 +17,6 @@ const Search = ({ countries, setCountries, setFiltered }) => {
     const filter = (countries, query) => {
         const filtered = countries.filter((country) => {
             const name = country.name.common
-            console.log(query)
             return name.toLowerCase().includes(query.toLowerCase())
         })
         setFiltered(filtered)

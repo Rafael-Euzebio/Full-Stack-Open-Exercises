@@ -1,4 +1,23 @@
+import { useState } from 'react'
 import './RenderCountry.css'
+
+const CountryButton = ({ country }) => {
+    const [show, setshow] = useState(false)
+
+    const handleClick = () => {
+        setshow(!show)
+    }
+    return (
+        <>
+            <button onClick={handleClick}>show</button>
+            {
+                show === true ?
+                    <CountryData country={country} />
+                    : null
+            }
+        </>
+    )
+}
 
 const CountryList = ({ countries }) => {
     return (
@@ -6,7 +25,7 @@ const CountryList = ({ countries }) => {
             {
                 countries.map((country) => {
                     return (
-                        <li key={country.name.official}>{country.name.common}</li>
+                        <li key={country.name.official}>{country.name.common} <CountryButton country={country} /></li>
                     )
                 })
             }
