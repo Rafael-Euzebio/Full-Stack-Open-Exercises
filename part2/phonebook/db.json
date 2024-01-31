@@ -2,28 +2,23 @@
   "persons": [
     {
       "name": "Arto Hellas",
-      "number": "040-123456",
+      "number": "923932",
       "id": "1"
     },
     {
       "name": "Ada Lovelace",
-      "number": "39-44-5323523",
+      "number": "923932",
       "id": "2"
     },
     {
       "name": "Dan Abramov",
-      "number": "12-43-234345",
+      "number": "923932",
       "id": "3"
     },
     {
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": "4"
-    },
-    {
-      "id": "24de",
-      "name": "John",
-      "number": "932832"
     }
   ]
 }
