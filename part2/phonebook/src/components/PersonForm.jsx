@@ -55,12 +55,15 @@ const PersonForm = ({ persons, setPersons, setMessage, }) => {
                 .create(newPerson)
                 .then(returnedPerson => {
                     setPersons(persons.concat(returnedPerson))
+                    setMessage({ text: `Added ${newPerson.name}`, type: 'confirmation' })
+                })
+                .catch(error => {
+                  setMessage({ text: error.response.data.error, type:'error'})
                 })
 
             setNewName('')
             setNewNumber('')
 
-            setMessage({ text: `Added ${newPerson.name}`, type: 'confirmation' })
         }
     }
 
