@@ -12,13 +12,13 @@ const create = (personObject) => {
 }
 
 const remove = (id) => {
-  const request = axios.delete(`${baseUrl}${id}`)
+  const request = axios.delete(`${baseUrl}/${id}`)
   return request.then((response) => response.data)
 }
 
 const update = (personObject) => {
   const { id } = personObject
-  const request = axios.put(`${baseUrl}${id}`, personObject)
+  const request = axios.put(`${baseUrl}/${id}`, personObject)
   return request.then((response) => response.data)
 }
 
