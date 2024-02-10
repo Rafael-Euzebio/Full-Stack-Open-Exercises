@@ -58,7 +58,7 @@ const PersonForm = ({ persons, setPersons, setMessage, }) => {
                     setMessage({ text: `Added ${newPerson.name}`, type: 'confirmation' })
                 })
                 .catch(error => {
-                  setMessage({ text: error.response.data.error, type:'error'})
+                    setMessage({ text: error.response.data.error, type:'error'})
                 })
 
             setNewName('')
