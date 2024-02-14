@@ -15,6 +15,22 @@ beforeEach(async () => {
   logger.info(`Saved ${helper.initialBlogs.length} blogs in the database`)
   await Promise.all(promiseArray)
 })
+
+describe('blogs returned from database', () => {
+  test('blogs are returned as a json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('there are 6 blogs', async () => {
+    const response = await api.get('/api/blogs')
+
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
+  })
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
   logger.info('connection closed')
