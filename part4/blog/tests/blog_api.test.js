@@ -69,7 +69,7 @@ describe('Inserting blogs in database', () => {
     for (const property in blog) {
       expect(response.body).toHaveProperty(property)
     }
-  }) 
+  })
 })
 
 afterAll(async () => {
