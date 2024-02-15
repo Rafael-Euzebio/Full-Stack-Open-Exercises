@@ -29,6 +29,13 @@ describe('blogs returned from database', () => {
 
     expect(response.body).toHaveLength(helper.initialBlogs.length)
   })
+
+  test('default "_id" field is returned as "id"', async () => {
+    const response = await api.get('/api/blogs')
+    const firstBlog = response.body[0]
+
+    expect(firstBlog.id).toBeDefined()
+  })
 })
 
 afterAll(async () => {
