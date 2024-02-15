@@ -56,6 +56,20 @@ describe('Inserting blogs in database', () => {
     const response = await api.get('/api/blogs')
     console.log(response.body)
   })
+
+  test('Post request returns a json object', async () => {
+    const response = await api.post('/api/blogs').send(blog)
+
+    expect(response.type).toBe('application/json')
+  })
+
+  test('Returned object has the same properties as the original', async () => {
+    const response = await api.post('/api/blogs').send(blog)
+
+    for (const property in blog) {
+      expect(response.body).toHaveProperty(property)
+    }
+  }) 
 })
 
 afterAll(async () => {
