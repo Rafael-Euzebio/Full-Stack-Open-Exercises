@@ -38,6 +38,26 @@ describe('blogs returned from database', () => {
   })
 })
 
+describe('Inserting blogs in database', () => {
+  const blog = {
+    author: 'Rainey Reitman',
+    likes: 5,
+    title: 'Free Speech is Only as Strong as the Weakest Link',
+    url: 'https://www.eff.org/deeplinks/2011/11/free-speech-only-strong-weakest-link'
+  }
+
+  test('Post request to database returns a succesful response', async () => {
+    const response = await api.post('/api/blogs').send(blog)
+    expect(response.status).toBe(201)
+  })
+
+  test('Database length increases by one', async () => {
+    await api.post('/api/blogs').send(blog)
+    const response = await api.get('/api/blogs')
+    console.log(response.body)
+  })
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
   logger.info('connection closed')
