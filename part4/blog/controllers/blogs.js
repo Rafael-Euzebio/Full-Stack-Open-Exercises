@@ -8,13 +8,18 @@ blogsRouter.get('/', async (req, res) => {
 })
 
 blogsRouter.post('/', async (req, res) => {
-  logger.info(req.body)
-  const blog = new Blog(req.body)
+  const body = req.body
+  logger.info(body)
 
-  if (!blog.likes) {
-    blog.likes = 0
+  if (!Object.hasOwn(body, 'likes')) {
+    req.body.likes = 0
   }
 
+  if (!Object.hasOwn(body, 'title')) {
+    res.status(400).json({ message: 'title is required' })
+  }
+
+  const blog = new Blog(body)
   const result = await blog.save()
   res.status(201).json(result)
 })
