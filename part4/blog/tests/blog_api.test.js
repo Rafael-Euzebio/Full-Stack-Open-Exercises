@@ -93,6 +93,17 @@ describe('Inserting blogs in database', () => {
     const response = await api.post('/api/blogs').send(blogWithoutTitle)
     expect(response.status).toBe(400)
   })
+
+  test('Sending a blog without url returns 400 status code', async () => {
+    const blogWithoutUrl = {
+      author: 'Rainey Reitman',
+      likes: 5,
+      title: 'Free Speech is only as Strong as the Weakest Link'
+    }
+
+    const response = await api.post('/api/blogs').send(blogWithoutUrl)
+    expect(response.status).toBe(400)
+  })
 })
 
 afterAll(async () => {
