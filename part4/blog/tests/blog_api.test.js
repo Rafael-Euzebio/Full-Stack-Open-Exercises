@@ -78,9 +78,20 @@ describe('Inserting blogs in database', () => {
       url: 'https://www.eff.org/deeplinks/2011/11/free-speech-only-strong-weakest-link'
     }
 
-    const response = await api.post('/api/blogs', blogWithoutLikes)
+    const response = await api.post('/api/blogs').send(blogWithoutLikes)
     expect(response.body).toHaveProperty('likes')
     expect(response.body.likes).toBe(0)
+  })
+
+  test('Sending a blog without title returns 400 status code', async () => {
+    const blogWithoutTitle = {
+      author: 'Rainey Reitman',
+      likes: 5,
+      url: 'https://www.eff.org/deeplinks/2011/11/free-speech-only-strong-weakest-link'
+    }
+
+    const response = await api.post('/api/blogs').send(blogWithoutTitle)
+    expect(response.status).toBe(400)
   })
 })
 
