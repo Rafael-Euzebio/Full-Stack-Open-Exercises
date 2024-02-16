@@ -15,8 +15,8 @@ blogsRouter.post('/', async (req, res) => {
     req.body.likes = 0
   }
 
-  if (!Object.hasOwn(body, 'title')) {
-    res.status(400).json({ message: 'title is required' })
+  if (!Object.hasOwn(body, 'title') || !Object.hasOwn(body, 'url')) {
+    res.status(400).json({ message: 'title and url are required' })
   }
 
   const blog = new Blog(body)
