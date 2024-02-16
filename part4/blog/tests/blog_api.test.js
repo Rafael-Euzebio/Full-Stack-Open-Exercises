@@ -106,6 +106,15 @@ describe('Inserting blogs in database', () => {
   })
 })
 
+describe('Deleting blogs from database', () => {
+  test('Deleting an existing id from the datbase', async () => {
+    const blog = helper.initialBlogs[0]
+    const response = await api.delete(`/api/blogs/${blog._id}`)
+
+    expect(response.status).toBe(200)
+  })
+})
+
 afterAll(async () => {
   await mongoose.connection.close()
   logger.info('connection closed')
