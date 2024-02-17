@@ -112,6 +112,15 @@ describe('Deleting blogs from database', () => {
     const response = await api.delete(`/api/blogs/${blog._id}`)
 
     expect(response.status).toBe(200)
+    expect(response.body.id).toBe(blog._id)
+  })
+
+  test('Updating an existing blog in the database', async () => {
+    const blog = helper.initialBlogs[0]
+    const response = await api.put(`/api/blogs/${blog._id}`).send({ likes: 29 })
+
+    expect(response.status).toBe(200)
+    expect(response.body.likes).toBe(29)
   })
 })
 
