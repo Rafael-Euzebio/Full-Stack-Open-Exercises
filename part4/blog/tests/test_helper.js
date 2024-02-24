@@ -49,4 +49,21 @@ const initialBlogs = [
   }
 ]
 
-module.exports = { initialBlogs }
+const initialUsers = [
+  {
+    name: 'Obi-Wan Kenobi',
+    username: 'heIsMe',
+    password: 'anElegantWeaponForaMoreCivilizedTime'
+  },
+  {
+    name: 'Artoo Detoo',
+    username: 'R2-D2',
+    password: 'binaryLanguage'
+  },
+  {
+    name: 'Anakin Skywalker',
+    username: 'Darth Vader',
+    password: 'iAmYourFather'
+  }
+]
+module.exports = { initialBlogs, initialUsers }
