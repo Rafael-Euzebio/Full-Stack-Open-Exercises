@@ -21,7 +21,7 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-describe('users in database', () => {
+describe('requests to /api/users', () => {
   test('POST returns 201 and a JSON with name, username and id', async () => {
     const user = {
       name: 'Luke Skywalker',
