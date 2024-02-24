@@ -30,9 +30,9 @@ describe('requests to /api/users', () => {
 
     const response = await api.post('/api/users')
       .send({ ...user, password: 'walkinginthesky' })
+      .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    expect(response.status).toBe(201)
     for (const property in user) {
       expect(response.body).toHaveProperty(property, user[property])
     }
