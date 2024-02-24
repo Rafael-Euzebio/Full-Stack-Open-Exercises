@@ -54,7 +54,6 @@ describe('Inserting blogs in database', () => {
   test('Database length increases by one', async () => {
     await api.post('/api/blogs').send(blog)
     const response = await api.get('/api/blogs')
-    console.log(response.body)
   })
 
   test('Post request returns a json object', async () => {
