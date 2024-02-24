@@ -38,6 +38,15 @@ describe('requests to /api/users', () => {
     }
     expect(response.body).toHaveProperty('id')
   })
+
+  test('GET returns all users in JSON format', async () => {
+    const response = await api.get('/api/users')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    console.log(response.body)
+    expect(response.body.length).toBe(helper.initialUsers.length)
+  })
 })
 
 afterAll(async () => {
