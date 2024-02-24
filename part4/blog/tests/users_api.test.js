@@ -28,7 +28,9 @@ describe('requests to /api/users', () => {
       username: 'LukeJedi'
     }
 
-    const response = await api.post('/api/users').send({ ...user, password: 'walkinginthesky' }).expect('Content-Type', /application\/json/)
+    const response = await api.post('/api/users')
+      .send({ ...user, password: 'walkinginthesky' })
+      .expect('Content-Type', /application\/json/)
 
     expect(response.status).toBe(201)
     for (const property in user) {
