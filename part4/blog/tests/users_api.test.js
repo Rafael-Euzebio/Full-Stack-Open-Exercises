@@ -63,6 +63,21 @@ describe('requests to /api/users', () => {
     expect(invalidUser.length).toBe(0)
   })
 
+  test('POST non-unique username returns 400 error and user is not created', async () => {
+    const nonUniqueUser = {
+      name: 'Darth Vader',
+      username: helper.initialUsers[2].username,
+      password: 'iAmYourFather'
+    }
+
+    const response = await api.post('/api/users')
+      .send(nonUniqueUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(response.body).toHaveProperty('error')
+  })
+
   test('POST password with less than 3 characters returns 400 and user is not created', async () => {
     const userWithShortPassword = {
       name: 'See-Threepio',
