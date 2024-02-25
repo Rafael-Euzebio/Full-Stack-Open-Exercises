@@ -37,6 +37,12 @@ describe('requests to /api/users', () => {
       expect(response.body).toHaveProperty(property, user[property])
     }
     expect(response.body).toHaveProperty('id')
+
+    const userInDatabase = await User.find(user)
+
+    for (const property in user) {
+      expect(userInDatabase[0]).toHaveProperty(property, user[property])
+    }
   })
 
   test('POST username with less than 3 characters return 400 and user is not created', async () => {
@@ -68,6 +74,7 @@ describe('requests to /api/users', () => {
       .send(userWithShortPassword)
       .expect(400)
       .expect('Content-Type', /application\/json/)
+
   })
 
   test('GET returns all users in JSON format', async () => {
