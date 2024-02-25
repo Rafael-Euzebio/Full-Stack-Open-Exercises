@@ -75,7 +75,6 @@ describe('requests to /api/users', () => {
       .expect(200)
       .expect('Content-Type', /application\/json/)
 
-    console.log(response.body)
     expect(response.body.length).toBe(helper.initialUsers.length)
   })
 })
