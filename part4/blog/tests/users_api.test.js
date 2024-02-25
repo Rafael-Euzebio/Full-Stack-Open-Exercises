@@ -57,6 +57,19 @@ describe('requests to /api/users', () => {
     expect(invalidUser.length).toBe(0)
   })
 
+  test('POST password with less than 3 characters returns 400 and user is not created', async () => {
+    const userWithShortPassword = {
+      name: 'See-Threepio',
+      username: 'C-3PO',
+      password: 'C3'
+    }
+
+    const response = await api.post('/api/users')
+      .send(userWithShortPassword)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
+
   test('GET returns all users in JSON format', async () => {
     const response = await api.get('/api/users')
       .expect(200)
