@@ -22,7 +22,7 @@ beforeEach(async () => {
 })
 
 describe('requests to /api/users', () => {
-  test('POST returns 201 and a JSON with name, username and id', async () => {
+  test('POST returns 201 and a JSON with name, username and id and user is created', async () => {
     const user = {
       name: 'Luke Skywalker',
       username: 'LukeJedi'
