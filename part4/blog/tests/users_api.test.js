@@ -75,6 +75,10 @@ describe('requests to /api/users', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
+    expect(response.body).toHaveProperty('error')
+
+    const invalidUser = await User.find({ name: userWithShortPassword.name })
+    expect(invalidUser.length).toBe(0)
   })
 
   test('GET returns all users in JSON format', async () => {
