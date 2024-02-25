@@ -8,6 +8,11 @@ usersRouter.post('/', async (req, res) => {
   if (username.length < 3 || password.length < 3) {
     return res.status(400).json({ error: 'Username and Password must be at least 3 characters long' })
   }
+
+  const uniqueUser = await User.find({ username })
+  if (uniqueUser.length !== 0) {
+    return res.status(400).json({ error: 'Username must be unique' })
+  }
   const hashedPassword = await bcrypt.hash(password, 10)
 
   const user = new User({ name, username, password: hashedPassword })
