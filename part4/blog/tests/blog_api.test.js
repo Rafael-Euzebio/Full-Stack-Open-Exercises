@@ -5,12 +5,18 @@ const api = supertest(app)
 const logger = require('../utils/logger')
 const helper = require('./test_helper.js')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
   logger.info('cleared')
 
-  const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+  const usersInDatabase = await User.find({})
+  const initialBlogs = helper.initialBlogs.map((blog) => {
+    blog.user = usersInDatabase[0].id
+    return blog
+  })
+  const blogObjects = initialBlogs.map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
   logger.info(`Saved ${helper.initialBlogs.length} blogs in the database`)
   await Promise.all(promiseArray)
@@ -36,6 +42,7 @@ describe('blogs returned from database', () => {
 
     expect(firstBlog.id).toBeDefined()
   })
+
 })
 
 describe('Inserting blogs in database', () => {
