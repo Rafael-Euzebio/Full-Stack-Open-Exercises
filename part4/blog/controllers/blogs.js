@@ -1,5 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const logger = require('../utils/logger')
 
 blogsRouter.get('/', async (req, res) => {
@@ -19,7 +20,9 @@ blogsRouter.post('/', async (req, res) => {
     return res.status(400).json({ message: 'title and url are required' })
   }
 
-  const blog = new Blog(body)
+  const users = await User.find({})
+  const blogCreator = users[0].id
+  const blog = new Blog({ ...body, user: blogCreator })
   const result = await blog.save()
   res.status(201).json(result)
 })
