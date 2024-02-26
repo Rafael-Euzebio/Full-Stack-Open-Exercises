@@ -70,6 +70,12 @@ describe('Inserting blogs in database', () => {
     }
   })
 
+  test('Returned object has a user id field', async () => {
+    const response = await api.post('/api/blogs').send(blog)
+
+    expect(response.body).toHaveProperty('user')
+  })
+
   test('Sending a blog without likes will default to 0', async () => {
     const blogWithoutLikes = {
       author: 'Rainey Reitman',
