@@ -95,7 +95,9 @@ describe('requests to /api/users', () => {
     const invalidUser = await User.find({ name: userWithShortPassword.name })
     expect(invalidUser.length).toBe(0)
   })
+})
 
+describe('GET requests to /api/users', () => {
   test('GET returns all users in JSON format', async () => {
     const response = await api.get('/api/users')
       .expect(200)
