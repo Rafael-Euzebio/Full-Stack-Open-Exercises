@@ -51,7 +51,6 @@ describe('blogs returned from database', () => {
       .expect('Content-Type', /application\/json/)
 
     for (const blog of response.body) {
-      console.log(blog)
       expect(blog).toHaveProperty('user')
 
       for (const property of userProperties) {
