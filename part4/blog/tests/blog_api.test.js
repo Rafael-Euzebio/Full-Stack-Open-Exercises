@@ -43,6 +43,22 @@ describe('blogs returned from database', () => {
     expect(firstBlog.id).toBeDefined()
   })
 
+  test('GET to /api/blogs returns user information on each blog', async () => {
+    const userProperties = ['name', 'username', 'id']
+
+    const response = await api.get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    for (const blog of response.body) {
+      console.log(blog)
+      expect(blog).toHaveProperty('user')
+
+      for (const property of userProperties) {
+        expect(blog.user).toHaveProperty(property)
+      }
+    }
+  })
 })
 
 describe('Inserting blogs in database', () => {
