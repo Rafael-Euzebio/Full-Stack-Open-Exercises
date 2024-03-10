@@ -70,7 +70,6 @@ describe('Inserting blogs in database', () => {
 
   test('Post request to database returns a succesful response', async () => {
     const response = await api.post('/api/blogs').send(blog)
-    expect(response.status).toBe(201)
   })
 
   test('Database length increases by one', async () => {
@@ -78,24 +77,16 @@ describe('Inserting blogs in database', () => {
     const response = await api.get('/api/blogs')
   })
 
-  test('Post request returns a json object', async () => {
+  test('Post request returns a json object with the original properties', async () => {
     const response = await api.post('/api/blogs').send(blog)
+      .expect('Content-Type', /application\/json/)
+      .expect(201)
 
-    expect(response.type).toBe('application/json')
-  })
-
-  test('Returned object has the same properties as the original', async () => {
-    const response = await api.post('/api/blogs').send(blog)
+    expect(response.body).toHaveProperty('user')
 
     for (const property in blog) {
       expect(response.body).toHaveProperty(property)
     }
-  })
-
-  test('Returned object has a user id field', async () => {
-    const response = await api.post('/api/blogs').send(blog)
-
-    expect(response.body).toHaveProperty('user')
   })
 
   test('Sending a blog without likes will default to 0', async () => {
