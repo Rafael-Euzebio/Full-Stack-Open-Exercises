@@ -111,13 +111,19 @@ describe('Inserting blogs in database', () => {
   })
 
   test('Sending a blog without likes will default to 0', async () => {
+    await helper.initializeUsersDB()
+
+    const { username, password } = helper.initialUsers[0]
+
+    const loginResponse = await api.post('/api/login/').send({ username, password })
+
     const blogWithoutLikes = {
       author: 'Rainey Reitman',
       title: 'Free Speech is Only as Strong as the Weakest Link',
       url: 'https://www.eff.org/deeplinks/2011/11/free-speech-only-strong-weakest-link'
     }
 
-    const response = await api.post('/api/blogs').send(blogWithoutLikes)
+    const response = await api.post('/api/blogs').send({ ...blogWithoutLikes, token: loginResponse.body.token })
     expect(response.body).toHaveProperty('likes')
     expect(response.body.likes).toBe(0)
   })
