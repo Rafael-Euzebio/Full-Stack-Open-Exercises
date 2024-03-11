@@ -1,3 +1,7 @@
+const User = require('../models/user')
+const logger = require('../utils/logger')
+const bcrypt = require('bcrypt')
+
 const initialBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
@@ -69,4 +73,19 @@ const initialUsers = [
     password: 'iAmYourFather'
   }
 ]
-module.exports = { initialBlogs, initialUsers }
+
+const initializeUsersDB = async () => {
+  await User.deleteMany({})
+  logger.info('cleared')
+
+  const userObjects = await Promise.all(initialUsers.map(async (user) => {
+    const { name, username, password } = user
+    const hashedPassword = await bcrypt.hash(password, 2)
+    return new User({ name, username, password: hashedPassword })
+  }))
+
+  const userPromiseArray = userObjects.map(user => user.save())
+  await Promise.all(userPromiseArray)
+}
+
+module.exports = { initialBlogs, initialUsers, initializeUsersDB }
