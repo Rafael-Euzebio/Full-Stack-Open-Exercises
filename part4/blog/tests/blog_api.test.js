@@ -4,6 +4,8 @@ const app = require('../app')
 const api = supertest(app)
 const logger = require('../utils/logger')
 const helper = require('./test_helper.js')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
 
@@ -89,6 +91,23 @@ describe('Inserting blogs in database', () => {
     for (const property in blog) {
       expect(insertResponse.body).toHaveProperty(property)
     }
+  })
+
+  test('POST request without a valid JWT token returns an error', async () => {
+    const insertResponse = await api.post('/api/blogs').send(blog)
+      .expect('Content-Type', /application\/json/)
+      .expect(401)
+
+    expect(insertResponse.body).toHaveProperty('error', 'login required')
+  })
+
+  test('POST with a invalid JWT token returns an error', async () => {
+    const invalidToken = jwt.sign('invalidToken', 'invalidSecret')
+    const insertResponse = await api.post('/api/blogs').send({ ...blog, token: invalidToken })
+      .expect('Content-Type', /application\/json/)
+      .expect(401)
+
+    expect(insertResponse.body).toHaveProperty('error', 'invalid token, login first')
   })
 
   test('Sending a blog without likes will default to 0', async () => {

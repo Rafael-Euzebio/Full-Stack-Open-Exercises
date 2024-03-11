@@ -2,6 +2,8 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 const logger = require('../utils/logger')
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 
 blogsRouter.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('user')
@@ -20,9 +22,18 @@ blogsRouter.post('/', async (req, res) => {
     return res.status(400).json({ message: 'title and url are required' })
   }
 
-  const users = await User.find({})
-  const blogCreator = users[0].id
-  const blog = new Blog({ ...body, user: blogCreator })
+  if (!Object.hasOwn(body, 'token')) {
+    return res.status(401).json({ error: 'login required' })
+  }
+
+  let token
+  try {
+    token = jwt.verify(body.token, process.env.JWT_SECRET)
+  } catch (error) {
+    return res.status(401).json({ error: 'invalid token, login first' })
+  }
+
+  const blog = new Blog({ ...body, user: token.id })
   const result = await blog.save()
   res.status(201).json(result)
 })
