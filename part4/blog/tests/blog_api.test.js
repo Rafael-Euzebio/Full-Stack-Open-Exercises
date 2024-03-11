@@ -68,24 +68,26 @@ describe('Inserting blogs in database', () => {
     url: 'https://www.eff.org/deeplinks/2011/11/free-speech-only-strong-weakest-link'
   }
 
-  test('Post request to database returns a succesful response', async () => {
-    const response = await api.post('/api/blogs').send(blog)
-  })
-
   test('Database length increases by one', async () => {
     await api.post('/api/blogs').send(blog)
     const response = await api.get('/api/blogs')
   })
 
-  test('Post request returns a json object with the original properties', async () => {
-    const response = await api.post('/api/blogs').send(blog)
+  test('POST request returns a json object with the original properties', async () => {
+    await helper.initializeUsersDB()
+
+    const { username, password } = helper.initialUsers[0]
+
+    const loginResponse = await api.post('/api/login/').send({ username, password })
+
+    const insertResponse = await api.post('/api/blogs').send({ ...blog, token: loginResponse.body.token })
       .expect('Content-Type', /application\/json/)
       .expect(201)
 
-    expect(response.body).toHaveProperty('user')
+    expect(insertResponse.body).toHaveProperty('user')
 
     for (const property in blog) {
-      expect(response.body).toHaveProperty(property)
+      expect(insertResponse.body).toHaveProperty(property)
     }
   })
 
