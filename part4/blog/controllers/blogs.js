@@ -35,7 +35,9 @@ blogsRouter.post('/', async (req, res) => {
 
   const blog = new Blog({ ...body, user: token.id })
   const result = await blog.save()
+  const updateUserBlogs = await User.findByIdAndUpdate(token.id, { $push: { blogs: result.id } })
   res.status(201).json(result)
+  res.status(201).json(updateUserBlogs)
 })
 
 blogsRouter.delete('/:id', async (req, res) => {
