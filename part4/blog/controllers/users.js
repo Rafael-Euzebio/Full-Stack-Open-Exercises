@@ -1,6 +1,5 @@
 const usersRouter = require('express').Router()
 const User = require('../models/user')
-const Blog = require('../models/blog')
 const bcrypt = require('bcrypt')
 
 usersRouter.post('/', async (req, res) => {
@@ -16,8 +15,7 @@ usersRouter.post('/', async (req, res) => {
   }
   const hashedPassword = await bcrypt.hash(password, 10)
 
-  const blogs = await Blog.find({})
-  const user = new User({ name, username, password: hashedPassword, blogs: [blogs[0].id] })
+  const user = new User({ name, username, password: hashedPassword })
   const result = await user.save()
   res.status(201).json(result)
 })
