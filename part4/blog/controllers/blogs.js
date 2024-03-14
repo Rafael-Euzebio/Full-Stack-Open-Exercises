@@ -22,22 +22,17 @@ blogsRouter.post('/', async (req, res) => {
     return res.status(400).json({ message: 'title and url are required' })
   }
 
-  if (!Object.hasOwn(body, 'token')) {
-    return res.status(401).json({ error: 'login required' })
-  }
+  const decodedToken = jwt.verify(req.token, process.env.JWT_SECRET)
+  console.log(decodedToken)
 
-  let token
-  try {
-    token = jwt.verify(body.token, process.env.JWT_SECRET)
-  } catch (error) {
+  if (!decodedToken.id) {
     return res.status(401).json({ error: 'invalid token, login first' })
   }
 
-  const blog = new Blog({ ...body, user: token.id })
+  const blog = new Blog({ ...body, user: decodedToken.id })
   const result = await blog.save()
-  const updateUserBlogs = await User.findByIdAndUpdate(token.id, { $push: { blogs: result.id } })
+  await User.findByIdAndUpdate(decodedToken.id, { $push: { blogs: result.id } })
   res.status(201).json(result)
-  res.status(201).json(updateUserBlogs)
 })
 
 blogsRouter.delete('/:id', async (req, res) => {

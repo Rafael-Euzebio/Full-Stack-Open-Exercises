@@ -1,10 +1,22 @@
 const logger = require('./logger')
+require('dotenv').config()
 
 const requestLogger = (req, res, next) => {
   logger.info('Method:', req.method)
   logger.info('Path', req.path)
   logger.info('Body', req.body)
   logger.info('---')
+  next()
+}
+
+const tokenExtractor = (req, res, next) => {
+  const token = req.get('Authorization')
+
+  if (token) {
+    req.token = token
+  } else {
+    req.token = null
+  }
   next()
 }
 
@@ -26,6 +38,7 @@ const errorHandler = (error, req, res, next) => {
 
 module.exports = {
   requestLogger,
+  tokenExtractor,
   unknowEndpoint,
   errorHandler
 }

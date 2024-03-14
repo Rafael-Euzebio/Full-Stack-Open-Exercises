@@ -83,7 +83,8 @@ describe('Inserting blogs in database', () => {
 
     const loginResponse = await api.post('/api/login/').send({ username, password })
 
-    const insertResponse = await api.post('/api/blogs').send({ ...blog, token: loginResponse.body.token })
+    const insertResponse = await api.post('/api/blogs').send(blog).set('Authorization', `Bearer ${loginResponse.body.token}`)
+
       .expect('Content-Type', /application\/json/)
       .expect(201)
 
@@ -124,7 +125,7 @@ describe('Inserting blogs in database', () => {
       url: 'https://www.eff.org/deeplinks/2011/11/free-speech-only-strong-weakest-link'
     }
 
-    const response = await api.post('/api/blogs').send({ ...blogWithoutLikes, token: loginResponse.body.token })
+    const response = await api.post('/api/blogs').send(blogWithoutLikes).set('Authorization', `Bearer ${loginResponse.body.token}`)
     expect(response.body).toHaveProperty('likes')
     expect(response.body.likes).toBe(0)
   })
