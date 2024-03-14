@@ -13,6 +13,7 @@ beforeEach(async () => {
   await Blog.deleteMany({})
   logger.info('cleared')
 
+  await helper.initializeUsersDB()
   const usersInDatabase = await User.find({})
   const initialBlogs = helper.initialBlogs.map((blog) => {
     blog.user = usersInDatabase[0].id
