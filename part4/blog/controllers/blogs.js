@@ -22,10 +22,11 @@ blogsRouter.post('/', async (req, res) => {
     return res.status(400).json({ message: 'title and url are required' })
   }
 
-  const decodedToken = jwt.verify(req.token, process.env.JWT_SECRET)
-  console.log(decodedToken)
+  let decodedToken
 
-  if (!decodedToken.id) {
+  try {
+    decodedToken = jwt.verify(req.token, process.env.JWT_SECRET)
+  } catch (error) {
     return res.status(401).json({ error: 'invalid token, login first' })
   }
 
