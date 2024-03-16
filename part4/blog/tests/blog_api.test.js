@@ -100,12 +100,12 @@ describe('Inserting blogs in database', () => {
       .expect('Content-Type', /application\/json/)
       .expect(401)
 
-    expect(insertResponse.body).toHaveProperty('error', 'login required')
+    expect(insertResponse.body).toHaveProperty('error', 'invalid token, login first')
   })
 
   test('POST with a invalid JWT token returns an error', async () => {
     const invalidToken = jwt.sign('invalidToken', 'invalidSecret')
-    const insertResponse = await api.post('/api/blogs').send({ ...blog, token: invalidToken })
+    const insertResponse = await api.post('/api/blogs').send(blog).set('Authorization', `Bearer ${invalidToken}`)
       .expect('Content-Type', /application\/json/)
       .expect(401)
 
