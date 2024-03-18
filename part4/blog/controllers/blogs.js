@@ -37,9 +37,24 @@ blogsRouter.post('/', async (req, res) => {
 })
 
 blogsRouter.delete('/:id', async (req, res) => {
-  const id = req.params.id
-  const result = await Blog.findOneAndDelete({ _id: id })
-  res.status(200).json(result)
+  const blogId = req.params.id
+  let decodedToken
+
+  try {
+    decodedToken = jwt.verify(req.token, process.env.JWT_SECRET)
+  } catch (error) {
+    return res.status(401).json({ error: 'invalid token, login first' })
+  }
+
+  const blogToDelete = await Blog.findById(blogId)
+  console.log(`blog: ${blogToDelete}, user: ${decodedToken.id}`)
+
+  if (blogToDelete.user.toString() !== decodedToken.id) {
+    return res.status(403).json({ error: 'You cannot delete blogs created by other users' })
+  }
+
+  const result = await Blog.findByIdAndDelete(blogId)
+  return res.status(200).json(result)
 })
 
 blogsRouter.put('/:id', async (req, res) => {
