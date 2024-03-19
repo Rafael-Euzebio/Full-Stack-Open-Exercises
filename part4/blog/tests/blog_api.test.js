@@ -4,10 +4,10 @@ const app = require('../app')
 const api = supertest(app)
 const logger = require('../utils/logger')
 const helper = require('./test_helper.js')
-const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
+require('dotenv').config()
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -153,7 +153,7 @@ describe('Inserting blogs in database', () => {
   })
 })
 
-describe('Deleting blogs from database', () => {
+describe('Changing blogs in database', () => {
   test('Deleting an existing id from the datbase', async () => {
     await helper.initializeUsersDB()
 
@@ -161,7 +161,6 @@ describe('Deleting blogs from database', () => {
 
     const loginResponse = await api.post('/api/login/').send({ username, password })
     const addingBlog = await api.post('/api/blogs').send(helper.initialBlogs[0]).set('Authorization', `Bearer ${loginResponse.body.token}`)
-    console.log(addingBlog.body)
     const deletingBlog = await api.delete(`/api/blogs/${addingBlog.body.id}`)
       .set('Authorization', `Bearer ${loginResponse.body.token}`)
       .expect(200)
@@ -170,13 +169,41 @@ describe('Deleting blogs from database', () => {
     expect(deletingBlog.body.id).toBe(addingBlog.body.id)
   })
 
-//  test('Updating an existing blog in the database', async () => {
-//    const blog = helper.initialBlogs[0]
-//    const response = await api.put(`/api/blogs/${blog._id}`).send({ likes: 29 })
-//
-//    expect(response.status).toBe(200)
-//    expect(response.body.likes).toBe(29)
-//  })
+  test('Updating an existing blog in the database', async () => {
+    await helper.initializeUsersDB()
+
+    const { username, password } = helper.initialUsers[0]
+    const loginResponse = await api.post('/api/login/').send({ username, password })
+    const addingBlog = await api.post('/api/blogs').send(helper.initialBlogs[0]).set('Authorization', `Bearer ${loginResponse.body.token}`)
+    const updatingBlog = await api.put(`/api/blogs/${addingBlog.body.id}`).send({ likes: 29 }).set('Authorization', `Bearer ${loginResponse.body.token}`)
+
+    expect(updatingBlog.status).toBe(200)
+    expect(updatingBlog.body.likes).toBe(29)
+  })
+
+  test('Trying to update a blog not created by the user returns 403', async () => {
+    await helper.initializeUsersDB()
+    const { username, password } = helper.initialUsers[0]
+    const loginResponse = await api.post('/api/login/').send({ username, password })
+    const addingBlog = await api.post('/api/blogs').send(helper.initialBlogs[0]).set('Authorization', `Bearer ${loginResponse.body.token}`)
+
+    const someUser = jwt.sign({ username: 'someUser', id: 'randomID' }, process.env.JWT_SECRET)
+    const updatingBlog = await api.put(`/api/blogs/${addingBlog.body.id}`).send({ likes: 29 }).set('Authorization', `Bearer ${someUser}`)
+
+    expect(updatingBlog.status).toBe(403)
+  })
+
+  test('Trying to delete a blog not created by the user returns 403', async () => {
+    await helper.initializeUsersDB()
+    const { username, password } = helper.initialUsers[0]
+    const loginResponse = await api.post('/api/login/').send({ username, password })
+    const addingBlog = await api.post('/api/blogs').send(helper.initialBlogs[0]).set('Authorization', `Bearer ${loginResponse.body.token}`)
+
+    const someUser = jwt.sign({ username: 'someUser', id: 'randomID' }, process.env.JWT_SECRET)
+    const updatingBlog = await api.delete(`/api/blogs/${addingBlog.body.id}`).send({ likes: 29 }).set('Authorization', `Bearer ${someUser}`)
+
+    expect(updatingBlog.status).toBe(403)
+  })
 })
 
 afterAll(async () => {
